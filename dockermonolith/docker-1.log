@@ -1,0 +1,8 @@
+REPOSITORY                 TAG       IMAGE ID       CREATED              SIZE
+first_im/ubuntu-tmp-file   latest    5c07a5bd2f3e   About a minute ago   63.3MB
+ubuntu                     18.04     c090eaba6b94   3 weeks ago          63.3MB
+hello-world                latest    bf756fb1ae65   13 months ago        13.3kB
+
+
+Docker образ состоит из нескольких слоев в режиме read only. Контейнер состоит из слоя поверх docker образа в режиме read write.
+Docker образ формируется на основе докерфайла. Контейнер запускается на основе образа. Контейнеры можно запускать, а docker образ нет. На основе docker образа можно запустить несколько контейнеров.
