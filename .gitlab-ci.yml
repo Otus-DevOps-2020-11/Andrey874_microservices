@@ -1,0 +1,70 @@
+image: ruby:2.4.2
+stages:
+  - build
+  - test
+  - review
+  - stage
+  - production
+
+branch review:
+  stage: review
+  script: echo "Deploy to $CI_ENVIRONMENT_SLUG"
+  environment:
+    name: branch/$CI_COMMIT_REF_NAME
+    urk: http://$CI_COMMIT_REF_NAME
+  only:
+    - branches
+  expect:
+    - master
+
+staging:
+  stage: stage
+  when: manual
+  only:
+    - /^\d+\.\d+/
+  script:
+    echo 'Deploy'
+  environment:
+    name: stage
+    url: http://beta.example.com
+
+production:
+  stage: production
+  when: manual
+  script:
+    - echo 'Deploy'
+  environment:
+    name: beta
+    url: http://example.com   
+
+variables: 
+  DATABASE_URL: 'mongodb://mongo/user_posts'
+
+before_scripts:
+    - cd reddit
+    - bundle install
+
+build_job:
+  stage: build
+  script:
+    - echo 'Building'
+
+test_unit_job:
+  stage: test
+  services:
+    - mongo:latest
+  script:
+    - ruby simpletest.rb 
+
+test_integration_job:
+  stage: test
+  script:
+    - echo 'Testing 2'
+
+deploy_job:
+  stage: review
+  script:
+    - echo 'Deploy'
+  environment:
+    name: dev
+    url: https://dev.example.com  
